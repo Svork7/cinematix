@@ -8,6 +8,8 @@ import Movies from './components/Pages/Movies/Movies'
 import Search from './components/Pages/Search/Search'
 import Favorite from './components/Pages/Favorite/Favorite'
 import History from './components/Pages/History/History'
+import NotFound from './components/Pages/NotFound/NotFound'
+
 import './App.css'
 
 function App() {
@@ -15,17 +17,17 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <Routes>
-          <Route path="/" element={<MainLayout />} />
-          <Route index element={<Home />} />
-          <Route path="signin" element={<SignIn />} />
-          <Route path="signup" element={<SignUp />} />
-          <Route path="movies" element={<Movies />} />
-          <Route path="search" element={<Search />} />
-          <Route path="favorites" element={<Favorite />} />
-          <Route path="history" element={<History />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="/" element={<MainLayout />}>
+            <Route index element={<Home />} />
+            <Route path="signin" element={<SignIn />} />
+            <Route path="signup" element={<SignUp />} />
+            <Route path="movies" element={<Movies />} />
+            <Route path="search" element={<Search />} />
+            <Route path="favorites" element={<Favorite />} />
+            <Route path="history" element={<History />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
         </Routes>
-        <Footer />
       </div>
     </BrowserRouter>
   )
