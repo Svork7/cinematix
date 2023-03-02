@@ -1,39 +1,70 @@
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-float infinite 3s ease-in-out;
-  }
-}
-
-.App-header {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  justify-content: space-between;
 }
 
-.App-link {
-  color: rgb(112, 76, 182);
+.App {
+  text-align: center;
 }
 
-@keyframes App-logo-float {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(10px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
+/*изменение стиля для активной ссылки по умолчанию с компонентом NavLink*/
+.active {
+  color: chocolate;
+  text-decoration: none;
+}
+
+.activeLink {
+  color: chocolate;
+  text-decoration: none;
+}
+/*
+.projectLink {
+  font-size: 25px;
+  text-decoration: none;
+}
+.projectLink:hover {
+  text-decoration: underline;
+}
+*/
+nav {
+  background-color: rgb(70, 53, 92);
+}
+
+nav a {
+  color: aquamarine;
+  margin: 15px;
+}
+
+h1 {
+  font-size: 50px;
+}
+
+h3 {
+  margin-top: 10px;
+  font-size: 26px;
+}
+
+button {
+  padding: 15px;
+  border-radius: 20px;
+  font-size: 25px;
+  border: 0;
+  cursor: pointer;
+  margin: 20px;
+}
+
+form {
+  font-size: 26px;
+}
+
+input {
+  margin: 15px;
+  padding: 10px;
+  font-size: 20px;
+}
+
+label {
+  display: block;
 }
