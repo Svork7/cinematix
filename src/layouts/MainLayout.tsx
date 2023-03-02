@@ -1,15 +1,14 @@
 import { Outlet } from 'react-router-dom'
-import HeaderMenu from '../components/HeaderMenu/HeaderMenu'
+import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
+import './MainLayout.css'
 
 const MainLayout = () => {
   return (
-    <div>
-      <>
-        <HeaderMenu />
-        <Outlet />
-        <Footer />
-      </>
+    <div className="mainLayout">
+      <Header />
+      <Outlet />
+      <Footer />
     </div>
   )
 }

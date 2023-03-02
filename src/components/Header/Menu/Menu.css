@@ -1,0 +1,18 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.headerNav {
+  align-items: center;
+}
+
+nav {
+  background-color: transparent;
+}
+
+nav a {
+  color: black;
+  margin: 15px;
+}

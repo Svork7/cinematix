@@ -3,9 +3,6 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-}
-
-.App {
   text-align: center;
 }
 
@@ -28,14 +25,6 @@
   text-decoration: underline;
 }
 */
-nav {
-  background-color: rgb(70, 53, 92);
-}
-
-nav a {
-  color: aquamarine;
-  margin: 15px;
-}
 
 h1 {
   font-size: 50px;

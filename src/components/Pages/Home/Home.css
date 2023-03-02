@@ -1,0 +1,9 @@
+.home {
+  background-image: url(../../../img/main-background.png);
+  background-size: 100vw;
+  min-height: 95vh;
+  /*display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;*/
+}

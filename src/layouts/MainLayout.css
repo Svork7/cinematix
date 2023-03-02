@@ -1,0 +1,11 @@
+.mainLayout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  max-width: 1920px;
+  /* background-image: url(../img/main-background.png);
+  background-size: contain;
+  background-repeat: no-repeat; */
+}

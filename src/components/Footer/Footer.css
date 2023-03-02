@@ -1,0 +1,27 @@
+.footer {
+  margin: 25px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 1.2rem 0;
+  background: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    from(#dedede),
+    to(#21aed1)
+  );
+  background: linear-gradient(180deg, #dedede 0%, #21aed1 100%);
+}
+
+.footerList {
+  width: 200px;
+  display: flex;
+  justify-content: space-between;
+  list-style-type: none;
+}
+
+nav a {
+  color: black;
+  margin: 15px;
+}

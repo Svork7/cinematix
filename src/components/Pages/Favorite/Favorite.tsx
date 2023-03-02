@@ -1,5 +1,7 @@
+import './Favorite.css'
+
 const Favorite = () => {
-  return <h1>Menu</h1>
+  return <h1>Favorite</h1>
 }
 
 export default Favorite
