@@ -5,6 +5,7 @@ import './MainLayout.css'
 
 const MainLayout = () => {
   return (
+
     <div className="mainLayout">
       <Header />
       <Outlet />
