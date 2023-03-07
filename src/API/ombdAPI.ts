@@ -23,7 +23,7 @@ export interface MovieInfo {
 }
 
 // Тип для объекта ответа от API
-export interface OmdbApiResponse {
+export interface OmdbAPIResponse {
   //тип отдаваемых данных
   Search: MovieInfo[]
   totalResults: string
@@ -32,7 +32,7 @@ export interface OmdbApiResponse {
 }
 
 // Создаем экземпляр API с помощью createApi
-export const omdbApi = createApi({
+export const omdbAPI = createApi({
   reducerPath: 'movies',
   baseQuery: fetchBaseQuery({ baseUrl: OMDB_API_URL }),
 
@@ -43,7 +43,7 @@ export const omdbApi = createApi({
       query: () => ({
         url: `?apikey=${API_KEY}&s=sunshine`,
       }),
-      transformResponse: (data: OmdbApiResponse) => {
+      transformResponse: (data: OmdbAPIResponse) => {
         // преобразовываем ответ API в список фильмов
         return data.Search
       },
@@ -65,7 +65,7 @@ export const omdbApi = createApi({
       query: (query) => ({
         url: `?apikey=${API_KEY}&s=${query}`,
       }),
-      transformResponse: (data: OmdbApiResponse) => {
+      transformResponse: (data: OmdbAPIResponse) => {
         // Если поиск не дал результатов, вернуть пустой массив
         // ответ API {"Response":"False","Error":"Movie not found!"}
         if (data.Error === 'Movie not found!') {
@@ -84,4 +84,4 @@ export const {
   useFetchAllMoviesQuery,
   useFetchMovieQuery,
   useFetchMoviesQuery,
-} = omdbApi
+} = omdbAPI
