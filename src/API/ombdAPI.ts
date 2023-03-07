@@ -45,7 +45,12 @@ export const omdbAPI = createApi({
       }),
       transformResponse: (data: OmdbAPIResponse) => {
         // преобразовываем ответ API в список фильмов
-        return data.Search
+        return data.search.map((movie) => {
+          return Object.keys(movie).reduce((acc, key) => {
+            acc[key.toLowerCase()] = movie[key]
+            return acc
+          }, {} as MovieInfo)
+        })
       },
     }),
 
@@ -56,7 +61,10 @@ export const omdbAPI = createApi({
       }),
       transformResponse: (data: MovieInfo) => {
         // преобразовываем ответ API в объект с информацией о фильме
-        return data
+        return Object.keys(data).reduce((acc, key) => {
+          acc[key.toLowerCase()] = data[key]
+          return acc
+        }, {} as MovieInfo)
       },
     }),
 
@@ -68,11 +76,16 @@ export const omdbAPI = createApi({
       transformResponse: (data: OmdbAPIResponse) => {
         // Если поиск не дал результатов, вернуть пустой массив
         // ответ API {"Response":"False","Error":"Movie not found!"}
-        if (data.Error === 'Movie not found!') {
+        if (data.Response === 'False' && data.Error === 'Movie not found!') {
           return []
         } else {
           // ответ API в список фильмов
-          return data.Search
+          return data.search.map((movie) => {
+            return Object.keys(movie).reduce((acc, key) => {
+              acc[key.toLowerCase()] = movie[key]
+              return acc
+            }, {} as MovieInfo)
+          })
         }
       },
     }),
