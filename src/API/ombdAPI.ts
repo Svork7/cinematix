@@ -59,7 +59,7 @@ export const omdbAPI = createApi({
       query: (query) => ({
         url: `?apikey=${API_KEY}&t=${query}&plot=full`,
       }),
-      transformResponse: (data: MovieInfo): MovieInfo =>
+      transformResponse: (data: OmdbAPIResponse): MovieInfo =>
         Object.keys(data).reduce((acc, key) => {
           acc[key.toLowerCase()] = data[key]
           return acc
