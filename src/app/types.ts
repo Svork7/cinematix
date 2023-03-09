@@ -4,10 +4,17 @@
 
 // типы для поиска
 
-export type SearchType = {
+export type Search = {
   Title: string
   Year: string
   imdbID: string
   Type: string
   Poster: string
+  Released: string
+  Director: string
+  Actors: string
+  Plot: string
+  Country: string
+  imdbRating: string
+  BoxOffice: string
 }
