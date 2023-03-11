@@ -4,7 +4,6 @@
 
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { API_KEY, OMDB_API_URL } from '../app/constants'
-import { SearchType } from '../app/types'
 
 // Тип для объекта фильма
 export interface MovieInfo {
