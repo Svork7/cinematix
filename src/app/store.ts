@@ -1,17 +1,54 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import counterReducer from '../features/counter/counterSlice';
+import {
+  combineReducers,
+  configureStore,
+  getDefaultMiddleware,
+  Middleware,
+  ThunkMiddleware,
+} from '@reduxjs/toolkit'
+import {
+  persistReducer,
+  persistStore,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+} from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
+import userSliceReducer from '../redux/userSlice'
+import checkLoginMiddleware from '../middleware/checkLoginMiddleware'
+import { omdbAPI } from '../API/omdbAPI'
 
-export const store = configureStore({
-  reducer: {
-    counter: counterReducer,
-  },
-});
+const rootReducer = combineReducers({
+  user: userSliceReducer,
+  [omdbAPI.reducerPath]: omdbAPI.reducer,
+})
 
-export type AppDispatch = typeof store.dispatch;
-export type RootState = ReturnType<typeof store.getState>;
-export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  RootState,
-  unknown,
-  Action<string>
->;
+const persistConfig = {
+  key: 'root',
+  storage,
+  blacklist: [omdbAPI.reducerPath],
+}
+
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+
+const middleware: Array<Middleware | ThunkMiddleware> = [
+  ...getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE],
+    },
+  }),
+  checkLoginMiddleware,
+  omdbAPI.middleware,
+]
+
+const store = configureStore({
+  reducer: persistedReducer,
+  middleware,
+})
+
+export const persistor = persistStore(store)
+export default store
+
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch

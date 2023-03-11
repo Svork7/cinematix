@@ -4,7 +4,7 @@ import {
   current,
   PayloadAction,
 } from '@reduxjs/toolkit'
-import { historyAPI } from '../API/historyAPI'
+import historyAPI from '../API/historyAPI'
 
 export interface User {
   username?: string
@@ -27,7 +27,7 @@ export const postHistory = createAsyncThunk<
   }
 
   try {
-    const response = await historyApi.post(currentUser, url)
+    const response = await historyAPI.post(currentUser, url)
     return { currentUser, historySearchCopy: response.historySearchCopy }
   } catch (err: any) {
     return thunkAPI.rejectWithValue(err.message)
@@ -46,7 +46,7 @@ export const getHistory = createAsyncThunk<
   }
 
   try {
-    const response = await historyApi.get(currentUser)
+    const response = await historyAPI.get(currentUser)
     return { currentUser, links: response.links }
   } catch (err: any) {
     return thunkAPI.rejectWithValue(err.message)
@@ -65,7 +65,7 @@ export const deleteHistory = createAsyncThunk<
   }
 
   try {
-    await historyApi.delete(currentUser)
+    await historyAPI.delete(currentUser)
     return { currentUser }
   } catch (err: any) {
     return thunkAPI.rejectWithValue(err.message)
