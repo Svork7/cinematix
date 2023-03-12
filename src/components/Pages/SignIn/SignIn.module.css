@@ -1,23 +1,24 @@
-.signUp {
+.signIn {
   width: 100vw;
   height: 80vh;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   background-image: url('../../../img/main-background.png');
   background-size: 100vw;
 }
 
-.signUpForm {
+.signInForm {
   max-width: 450px;
-  height: 550px;
+  height: 350px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.signUpFormForm {
+.signInFormForm {
   height: 90%;
   background-color: #333333;
   padding: 15px 40px;
@@ -30,7 +31,7 @@
   opacity: 90%;
 }
 
-.signUpFormHeader {
+.signInFormHeader {
   margin: 0.7rem 0 1rem 0;
   letter-spacing: 0.05em;
   font-size: 18px;
@@ -38,11 +39,9 @@
   text-align: center;
 }
 
-.signUpFormRedirectP {
+.signInRedirectSpan {
   color: #000000;
-  font-size: 18px;
-}
-
-.signUpFormRedirectSpan {
+  font-size: 16px;
+  letter-spacing: 0.03em;
   text-decoration: underline;
 }
