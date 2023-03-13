@@ -13,7 +13,7 @@ const SearchInput = (props: Props) => {
   return (
     <div>
       <input
-        className="searchInput"
+        className={styles.searchInput}
         {...inputProps}
         onChange={onChange}
         autoFocus

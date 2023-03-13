@@ -1,12 +1,11 @@
-import React from 'react'
 import { NavLink, Link } from 'react-router-dom'
 import Menu from './Menu/Menu'
-import './Header.css'
+import styles from './Header.module.css'
 import Logo from './Logo/Logo'
 
 const Header = () => {
   return (
-    <div className="header">
+    <div className={styles.header}>
       <Logo />
       <Menu />
     </div>

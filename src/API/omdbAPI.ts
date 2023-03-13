@@ -7,20 +7,20 @@ import { API_KEY, OMDB_API_URL } from '../app/constants'
 
 // Тип для объекта фильма
 export interface MovieInfo {
-  Title: string
-  Year: string
-  imdbID: string
-  Type: string
-  Poster: string
-  Released: string
-  Production: string
-  Director: string
-  Actors: string
-  Plot: string
-  Country: string
-  imdbRating: string
-  BoxOffice: string
-  Website: string
+  Title?: string
+  Year?: string
+  imdbID?: string
+  Type?: string
+  Poster?: string
+  Released?: string
+  Production?: string
+  Director?: string
+  Actors?: string
+  Plot?: string
+  Country?: string
+  imdbRating?: string
+  BoxOffice?: string
+  Website?: string
 }
 
 // Тип для объекта ответа от API
