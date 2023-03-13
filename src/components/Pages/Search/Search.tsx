@@ -1,9 +1,10 @@
 import React, { useState, Suspense } from 'react'
-import { useLocation, useNavigate, Link } from 'react-router-dom'
+import { useLocation, useNavigate, Link, useParams } from 'react-router-dom'
 import { useAppDispatch, useCurrentUser } from '../../../app/hooks'
 import { TYPE_FILTER } from '../../../app/constants'
 import { postHistory } from '../../../redux/userSlice'
 import { Loader } from '../../Loader/Loader'
+import useSearchHandler from '../../../app/utils/useSearchHandler'
 import Button from '../../UI/Button/Button'
 import SearchInput from '../../UI/SearchInput/SearchInput'
 import PageHeader from '../../Pages/PageHeader'
@@ -14,23 +15,33 @@ const SearchResults = React.lazy(
   () => import('../../SearchResults/SearchResults')
 )
 
-interface SearchSectionProps {}
+interface SearchProps {}
 
 interface FilterState {
   [key: string]: boolean
 }
 
-export const SearchSection: React.FC<SearchSectionProps> = () => {
+export const Search: React.FC<SearchProps> = () => {
   const location = useLocation()
-  const dispatch = useAppDispatch()
-  const urlQuery = window.location.href.split('?')[1]
-  const name = new URLSearchParams(location.search).get('name')
-  const userEmail = useCurrentUser()?.email as string
+  const [filterState, setFilterState] = useState<FilterState>(() => {
+    const params = new URLSearchParams(location.search)
+    const type = params.get('type')
+    const initialFilterState: FilterState = {}
+    TYPE_FILTER.forEach((el) => {
+      initialFilterState[el] = type
+        ? type.split(',').includes(el)
+        : el === 'All'
+    })
+    return initiaSlFilterState
+  })
 
-  const [filterState, setFilterState] = useState<FilterState>({})
-  const [query, setQuery] = useState<string>(urlQuery || 'simpsons')
+  const [query, setQuery] = useState<string>(() => {
+    const params = new URLSearchParams(location.search)
+    const name = params.get('name') || 'simpsons'
+    return `name=${name}`
+  })
+
   const [searchName, setSearchName] = useState<string>(name || '')
-  const navigate = useNavigate()
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchName(e.target.value)
@@ -39,7 +50,6 @@ export const SearchSection: React.FC<SearchSectionProps> = () => {
   const toggleFilterItem = (e: React.MouseEvent<HTMLElement>) => {
     const target = e.target as HTMLElement
     const value = target.innerText
-    target.classList.toggle('active')
 
     const newFilterState = Object.assign({}, filterState)
     newFilterState[value] = !newFilterState[value]
@@ -48,26 +58,12 @@ export const SearchSection: React.FC<SearchSectionProps> = () => {
     setSearchName(name || '')
   }
 
-  const applyFilters = () => {
-    const resultQueryParams: string[] = [`name=${searchName || 'simpsons'}`]
-
-    for (let key in filterState) {
-      if (filterState[key] && key !== 'All') {
-        resultQueryParams.push(`type=${key}`)
-      }
-    }
-
-    const url = `${location.pathname}?${resultQueryParams.join('&')}`
-    dispatch(postHistory({ url, userEmail }))
-    navigate(`?${resultQueryParams.join('&')}`)
-    setQuery(resultQueryParams.join('&'))
-  }
-
   return (
     <div className={styles.search}>
       <PageHeader
         text={' Here you can find info about Movies, Cartoons and Series!'}
       />
+
       <div className={styles.searchInput}>
         <SearchInput
           placeholder="Enter your search request here"
@@ -83,7 +79,9 @@ export const SearchSection: React.FC<SearchSectionProps> = () => {
           {TYPE_FILTER.map((el, i) => {
             return (
               <div
-                className={styles.searchFilterItem}
+                className={`${styles.searchFilterItem} ${
+                  filterState[el] ? styles.active : ''
+                }`}
                 key={i}
                 onClick={toggleFilterItem}
               >
@@ -93,7 +91,7 @@ export const SearchSection: React.FC<SearchSectionProps> = () => {
           })}
         </div>
       </div>
-      <Button buttonName="Search" onClick={applyFilters} />
+      <Button buttonName="Search" onClick={useSearchHandler} />
       <PageHeader text={'Search Results:'} />
       <Suspense fallback={<Loader />}>
         <SearchResults searchName={query} />
