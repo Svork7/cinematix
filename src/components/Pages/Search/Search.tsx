@@ -4,7 +4,7 @@ import { useAppDispatch, useCurrentUser } from '../../../app/hooks'
 import { TYPE_FILTER } from '../../../app/constants'
 import { postHistory } from '../../../redux/userSlice'
 import { Loader } from '../../Loader/Loader'
-import useSearchHandler from '../../../app/utils/useSearchHandler'
+import { useSearchHandler } from '../../../app/utils/useSearchHandler'
 import Button from '../../UI/Button/Button'
 import SearchInput from '../../UI/SearchInput/SearchInput'
 import PageHeader from '../../Pages/PageHeader'
@@ -22,6 +22,7 @@ interface FilterState {
 }
 
 export const Search: React.FC<SearchProps> = () => {
+  const { applyFilters } = useSearchHandler()
   const location = useLocation()
   const [filterState, setFilterState] = useState<FilterState>(() => {
     const params = new URLSearchParams(location.search)
@@ -32,7 +33,7 @@ export const Search: React.FC<SearchProps> = () => {
         ? type.split(',').includes(el)
         : el === 'All'
     })
-    return initiaSlFilterState
+    return initialFilterState
   })
 
   const [query, setQuery] = useState<string>(() => {
@@ -91,7 +92,7 @@ export const Search: React.FC<SearchProps> = () => {
           })}
         </div>
       </div>
-      <Button buttonName="Search" onClick={useSearchHandler} />
+      <Button buttonName="Search" onClick={applyFilters} />
       <PageHeader text={'Search Results:'} />
       <Suspense fallback={<Loader />}>
         <SearchResults searchName={query} />

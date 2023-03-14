@@ -1,0 +1,48 @@
+.movies {
+  width: 100%;
+  height: fit-content;
+  min-height: 100vh;
+  display: flex;
+  background-image: url('../../../img/main-background.png');
+  background-size: 140vw;
+  padding: 1rem 10rem;
+  align-items: center;
+  flex-direction: column;
+}
+
+.moviesSection {
+  padding: 30px 30px;
+  border-radius: 10px;
+  background-color: rgba(61, 61, 61, 0.827);
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.moviesSectionFound {
+  width: 75vw;
+  display: flex;
+  justify-content: space-between;
+}
+
+.dynamicSearch {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dynamicSearch input {
+  border-radius: 10px 0px 0px 10px;
+}
+
+.advancedSearch {
+  width: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  font-size: 18px;
+  color: yellow;
+  background-color: rgba(61, 61, 61, 0.827);
+  border-radius: 0px 10px 10px 0px;
+}
