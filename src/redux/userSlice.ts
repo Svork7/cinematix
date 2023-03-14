@@ -7,10 +7,10 @@ import {
 import historyAPI from '../API/historyAPI'
 
 export interface User {
-  username?: string
-  email?: string
-  password?: string
-  isAuth?: boolean
+  username: string
+  email: string
+  password: string
+  isAuth: boolean
   favorites: { name: string; url: string }[]
   historySearch: string[]
 }

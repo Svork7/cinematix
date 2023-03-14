@@ -7,20 +7,20 @@ import { API_KEY, OMDB_API_URL } from '../app/constants'
 
 // Тип для объекта фильма
 export interface MovieInfo {
-  Title?: string
-  Year?: string
-  imdbID?: string
-  Type?: string
-  Poster?: string
-  Released?: string
-  Production?: string
-  Director?: string
-  Actors?: string
-  Plot?: string
-  Country?: string
-  imdbRating?: string
-  BoxOffice?: string
-  Website?: string
+  Title: string
+  Year: string
+  imdbID: string
+  Type: string
+  Poster: string
+  Released: string
+  Production: string
+  Director: string
+  Actors: string
+  Plot: string
+  Country: string
+  imdbRating: string
+  BoxOffice: string
+  Website: string
 }
 
 // Тип для объекта ответа от API
@@ -44,9 +44,9 @@ export const omdbAPI = createApi({
         url: `?apikey=${API_KEY}&s=sunshine`,
       }),
       transformResponse: (data: OmdbAPIResponse): MovieInfo[] => {
-        return data.Search.map((movie) =>
+        return data.Search.map((movie: any) =>
           Object.keys(movie).reduce((acc, key) => {
-            acc[key.toLowerCase()] = movie[key]
+            acc[key.toLowerCase() as keyof MovieInfo] = movie[key]
             return acc
           }, {} as MovieInfo)
         )
@@ -60,7 +60,7 @@ export const omdbAPI = createApi({
       }),
       transformResponse: (data: OmdbAPIResponse): MovieInfo =>
         Object.keys(data).reduce((acc, key) => {
-          acc[key.toLowerCase()] = data[key]
+          acc[key.toLowerCase() as keyof MovieInfo] = data[key]
           return acc
         }, {} as MovieInfo),
     }),
@@ -75,9 +75,9 @@ export const omdbAPI = createApi({
           return []
         } else {
           // ответ API в список фильмов
-          return data.Search.map((movie) =>
+          return data.Search.map((movie: any) =>
             Object.keys(movie).reduce((acc, key) => {
-              acc[key.toLowerCase()] = movie[key]
+              acc[key.toLowerCase() as keyof MovieInfo] = movie[key]
               return acc
             }, {} as MovieInfo)
           )

@@ -4,22 +4,10 @@ import { useAppDispatch, useCurrentUser } from '../hooks'
 import { TYPE_FILTER } from '../constants'
 import { postHistory } from '../../redux/userSlice'
 
-const useSearchHandler = () => {
+export const useSearchHandler = () => {
   const location = useLocation()
   const dispatch = useAppDispatch()
   const userEmail = useCurrentUser()?.email as string
-
-  const [filterState, setFilterState] = useState<FilterState>(() => {
-    const params = new URLSearchParams(location.search)
-    const type = params.get('type')
-    const initialFilterState: FilterState = {}
-    TYPE_FILTER.forEach((el) => {
-      initialFilterState[el] = type
-        ? type.split(',').includes(el)
-        : el === 'All'
-    })
-    return initialFilterState
-  })
 
   const [query, setQuery] = useState<string>(() => {
     const params = new URLSearchParams(location.search)
@@ -54,6 +42,12 @@ const useSearchHandler = () => {
     navigate(url)
     setQuery(resultQueryParams)
   }
-}
 
-export default useSearchHandler
+  return {
+    query,
+    setQuery,
+    searchName,
+    setSearchName,
+    applyFilters,
+  }
+}
