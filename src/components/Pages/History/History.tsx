@@ -1,4 +1,7 @@
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { selectHistoryCount } from '../../../redux/selector'
+
 import {
   useAppSelector,
   useCurrentUser,
@@ -19,10 +22,14 @@ export const History = () => {
   const clearHistory = () => {
     dispatch(deleteHistory(currentUser?.email as string))
   }
+  const historyCount = useSelector((state) => selectHistoryCount(state))
   if (links.length > 0) {
     return (
       <div className={s.history}>
         <PageHeader text={'Search history'} />
+        <div>
+          <p>History count for: {historyCount}</p>
+        </div>
         <div className={s.historyWrap}>
           <button onClick={clearHistory} className={s.historyClear}>
             Clear History
