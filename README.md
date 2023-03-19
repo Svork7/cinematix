@@ -36,6 +36,7 @@ React app with info about movies
 
 - Использование TypeScript
 - StoryBook https://github.com/Svork7/cinematix/blob/main/src/components/UI/Button/Button.stories.tsx
+- createSelector https://github.com/Svork7/cinematix/blob/main/src/redux/selector.ts
 
 # Getting Started with Create React App
 

@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import { useDispatch, TypedUseSelectorHook, useSelector } from 'react-redux'
 import type { AppDispatch, RootState } from '../app/store'
 import { User } from '../redux/userSlice'
