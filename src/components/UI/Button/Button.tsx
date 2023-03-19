@@ -1,9 +1,10 @@
 import styles from './Button.module.css'
 
-interface Props {
-  className?: any
+export interface Props {
+  className?: string
   buttonName?: string
-  onClick?: React.MouseEventHandler<HTMLButtonElement>
+  variant?: string
+  onClick?: React.MouseEventHandler<HTMLElement>
 }
 
 const Button = ({
@@ -17,4 +18,5 @@ const Button = ({
     </button>
   )
 }
+
 export default Button

@@ -7,52 +7,47 @@ import Input from '../../UI/Input/Input'
 import Button from '../../UI/Button/Button'
 import styles from './SignIn.module.css'
 
-interface FormValues {
-  email: string
-  password: string
-}
-
-interface User {
-  email: string
-  password: string
-}
-
 export const SignIn = () => {
-  const [formData, setFormData] = useState<FormValues>({
+  const [values, setValues] = useState({
     email: '',
     password: '',
   })
+
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const currentUser = useAppSelector((state) => state.user[formData.email])
 
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  const user = useAppSelector((state) => state.user)
+
+  const checkUser = (e: React.SyntheticEvent) => {
     e.preventDefault()
     try {
-      if (currentUser && formData.password === currentUser.password) {
-        dispatch(signIn(formData.email))
+      let checkEmail = user[values.email as keyof typeof user]['email']
+
+      if (
+        checkEmail &&
+        values.password === user[values.email as keyof typeof user]['password']
+      ) {
+        dispatch(signIn(values.email))
+
         navigate('/')
       } else {
-        handleError('Invalid password.')
+        alert('Invalid password.')
       }
     } catch (err) {
-      handleError("User doesn't exist.")
+      alert("User doesn't exist.")
     }
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
-
-  const handleError = (message: string) => {
-    console.error(message)
+  const onChange = (e: React.SyntheticEvent) => {
+    const target = e.target as HTMLInputElement
+    setValues({ ...values, [target.name]: target.value })
   }
 
   return (
     <div className={styles.signIn}>
       <div className={styles.signInForm}>
-        <form className={styles.signInFormForm} onSubmit={handleLogin}>
+        {' '}
+        <form className={styles.signInFormForm} onSubmit={checkUser}>
           <h1 className={styles.signInFormHeader}>Log in</h1>
           <div>
             {LOGIN_INPUTS.map((input) => (
@@ -66,8 +61,8 @@ export const SignIn = () => {
                 pattern={input.pattern}
                 required={input.required}
                 placeholder={input.placeholder}
-                value={formData[input.name as keyof FormValues]}
-                onChange={handleChange}
+                value={values[input.name as keyof typeof values]}
+                onChange={onChange}
               />
             ))}
           </div>

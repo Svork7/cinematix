@@ -1,62 +1,66 @@
 import React, { useState, Suspense } from 'react'
-import { useLocation, useNavigate, Link, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, Link } from 'react-router-dom'
+import ForwardIcon from '@mui/icons-material/Forward'
 import { useAppDispatch, useCurrentUser } from '../../../app/hooks'
 import { TYPE_FILTER } from '../../../app/constants'
 import { postHistory } from '../../../redux/userSlice'
-import { Loader } from '../../Loader/Loader'
-import { useSearchHandler } from '../../../app/utils/useSearchHandler'
+//import { useSearchHandler } from '../../../app/utils/useSearchHandler'
 import Button from '../../UI/Button/Button'
-import SearchInput from '../../UI/SearchInput/SearchInput'
+import { SearchInput } from '../../UI/SearchInput/SearchInput'
+import { Loader } from '../../Loader/Loader'
 import PageHeader from '../../Pages/PageHeader'
-import ForwardIcon from '@mui/icons-material/Forward'
 import styles from './Search.module.css'
 
 const SearchResults = React.lazy(
   () => import('../../SearchResults/SearchResults')
 )
 
-interface SearchProps {}
-
-interface FilterState {
-  [key: string]: boolean
-}
-
-export const Search: React.FC<SearchProps> = () => {
-  const { applyFilters } = useSearchHandler()
+export const Search = () => {
   const location = useLocation()
-  const [filterState, setFilterState] = useState<FilterState>(() => {
-    const params = new URLSearchParams(location.search)
-    const type = params.get('type')
-    const initialFilterState: FilterState = {}
-    TYPE_FILTER.forEach((el) => {
-      initialFilterState[el] = type
-        ? type.split(',').includes(el)
-        : el === 'All'
+  const dispatch = useAppDispatch()
+
+  const name = new URLSearchParams(location.search).get('name')
+  const userEmail = useCurrentUser()?.email as string
+
+  const [filterState, setFilterState] = React.useState<Record<string, boolean>>(
+    {}
+  )
+  const [query, setQuery] = React.useState(location.search || 'break')
+  const [searchName, setSearchName] = useState(name || '')
+  const navigate = useNavigate()
+
+  const clickOnFilterItem = (e: React.MouseEvent<HTMLElement>) => {
+    const target = e.target as HTMLElement
+    const value = target.innerText
+    target.classList.toggle('active')
+
+    setFilterState((prevState) => {
+      const result = { ...prevState }
+      result[value] = !prevState[value]
+      return result
     })
-    return initialFilterState
-  })
 
-  const [query, setQuery] = useState<string>(() => {
-    const params = new URLSearchParams(location.search)
-    const name = params.get('name') || 'simpsons'
-    return `name=${name}`
-  })
-
-  const [searchName, setSearchName] = useState<string>(name || '')
+    setSearchName(name || '')
+  }
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchName(e.target.value)
   }
 
-  const toggleFilterItem = (e: React.MouseEvent<HTMLElement>) => {
-    const target = e.target as HTMLElement
-    const value = target.innerText
+  const applyFilters = () => {
+    const resultQueryParams: string[] = []
+    resultQueryParams.push(`=${searchName || 'break'}`)
 
-    const newFilterState = Object.assign({}, filterState)
-    newFilterState[value] = !newFilterState[value]
+    for (let key in filterState) {
+      if (filterState[key] && key !== 'All') {
+        resultQueryParams.push(`type=${key}`)
+      }
+    }
 
-    setFilterState(newFilterState)
-    setSearchName(name || '')
+    const url = `${location.pathname}?${resultQueryParams.join('&')}`
+    dispatch(postHistory({ url, userEmail }))
+    navigate(`?${resultQueryParams.join('&')}`)
+    setQuery(resultQueryParams.join('&'))
   }
 
   return (
@@ -64,28 +68,23 @@ export const Search: React.FC<SearchProps> = () => {
       <PageHeader
         text={' Here you can find info about Movies, Cartoons and Series!'}
       />
-
       <div className={styles.searchInput}>
         <SearchInput
           placeholder="Enter your search request here"
           value={searchName}
           onChange={onChange}
         />
-        <Link to="/movies">Switch to Dynamic Search {<ForwardIcon />}</Link>
+        <Link className={styles.rtSearch} to="/movies">
+          Switch to Real-time Search {<ForwardIcon />}
+        </Link>
       </div>
 
       <div className={styles.searchFilterWrap}>
-        <span className={styles.searchFilterType}>Type :</span>
+        <span className={styles.searchFilterType}>Choose filters: </span>
         <div className={styles.searchFilterItems}>
           {TYPE_FILTER.map((el, i) => {
             return (
-              <div
-                className={`${styles.searchFilterItem} ${
-                  filterState[el] ? styles.active : ''
-                }`}
-                key={i}
-                onClick={toggleFilterItem}
-              >
+              <div key={i} onClick={clickOnFilterItem}>
                 {el}
               </div>
             )

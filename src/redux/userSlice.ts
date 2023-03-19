@@ -1,160 +1,126 @@
-import {
-  createAsyncThunk,
-  createSlice,
-  current,
-  PayloadAction,
-} from '@reduxjs/toolkit'
-import historyAPI from '../API/historyAPI'
+import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit'
+import { historyAPI } from '../API/historyAPI'
+
+export const postHistory = createAsyncThunk(
+  'user/postHistory',
+  async (args: { url: string; userEmail: string }, thunkAPI: any) => {
+    const { url, userEmail } = args
+    const currentUser = thunkAPI.getState().user[userEmail]
+
+    if (currentUser) {
+      return await historyAPI.post(currentUser, url)
+    } else {
+      return
+    }
+  }
+)
+
+export const getHistory = createAsyncThunk(
+  'user/getHistory',
+  async (userEmail: string, thunkAPI: any) => {
+    const currentUser: User = thunkAPI.getState().user[userEmail]
+    return await historyAPI.get(currentUser)
+  }
+)
+
+export const deleteHistory = createAsyncThunk(
+  'user/deleteHistory',
+  async (userEmail: string, thunkAPI: any) => {
+    const currentUser: User = thunkAPI.getState().user[userEmail]
+    return await historyAPI.delete(currentUser)
+  }
+)
 
 export interface User {
-  username: string
-  email: string
-  password: string
-  isAuth: boolean
-  favorites: { name: string; url: string }[]
-  historySearch: string[]
+  [prop: string]: any
+  username?: string
+  email?: string
+  password?: string
+  isAuth?: boolean
+  favorites?: { name: string; url: string }[]
+  historySearch?: string[]
 }
-
-export const postHistory = createAsyncThunk<
-  { currentUser: User; historySearchCopy: string[] },
-  { url: string; userEmail: string },
-  { rejectValue: string }
->('user/postHistory', async ({ url, userEmail }, thunkAPI: any) => {
-  const currentUser = thunkAPI.getState().user[userEmail]
-
-  if (!currentUser) {
-    return thunkAPI.rejectWithValue('User not found.')
-  }
-
-  try {
-    const response = await historyAPI.post(currentUser, url)
-    return { currentUser, historySearchCopy: response.historySearchCopy }
-  } catch (err: any) {
-    return thunkAPI.rejectWithValue(err.message)
-  }
-})
-
-export const getHistory = createAsyncThunk<
-  { currentUser: User; links: string[] },
-  string,
-  { rejectValue: string }
->('user/getHistory', async (userEmail, thunkAPI: any) => {
-  const currentUser = thunkAPI.getState().user[userEmail]
-
-  if (!currentUser) {
-    return thunkAPI.rejectWithValue('User not found.')
-  }
-
-  try {
-    const response = await historyAPI.get(currentUser)
-    return { currentUser, links: response.links }
-  } catch (err: any) {
-    return thunkAPI.rejectWithValue(err.message)
-  }
-})
-
-export const deleteHistory = createAsyncThunk<
-  { currentUser: User },
-  string,
-  { rejectValue: string }
->('user/deleteHistory', async (userEmail, thunkAPI: any) => {
-  const currentUser = thunkAPI.getState().user[userEmail]
-
-  if (!currentUser) {
-    return thunkAPI.rejectWithValue('User not found.')
-  }
-
-  try {
-    await historyAPI.delete(currentUser)
-    return { currentUser }
-  } catch (err: any) {
-    return thunkAPI.rejectWithValue(err.message)
-  }
-})
-
-interface UserState {
-  [email: string]: User
-}
-
-const initialState: UserState = {}
 
 const userSlice = createSlice({
   name: 'user',
-  initialState,
+  initialState: {} as Record<string, User>,
   reducers: {
-    signIn(state, action: PayloadAction<string>) {
-      const userEmail = action.payload
-      if (state[userEmail]) {
-        state[userEmail].isAuth = true
-      }
+    signIn(state, action) {
+      const currentUser = action.payload
+      state[currentUser].isAuth = true
     },
-    logOut(state, action: PayloadAction<string>) {
-      const userEmail = action.payload
-      if (state[userEmail]) {
-        state[userEmail].isAuth = false
-      }
+
+    logOut(state, action) {
+      const currentUser = action.payload
+      state[currentUser].isAuth = false
     },
-    addUser(state, action: PayloadAction<User>) {
-      const newUser: any = action.payload
-      state[newUser.email] = {
-        ...newUser,
-        isAuth: false,
-        favorites: [],
-        historySearch: [],
-      }
+
+    addUser(state, action) {
+      const newUser = action.payload.email
+      state[newUser] = action.payload
+      state[newUser].isAuth = false
+      state[newUser].favorites = []
+      state[newUser].historySearch = []
     },
-    addFavorite(
-      state,
-      action: PayloadAction<{ name: string; url: string; userEmail: string }>
-    ) {
+
+    addFavorite(state, action) {
       const { name, url, userEmail } = action.payload
-      const user = state[userEmail]
-      if (!user) {
-        return
+      const newFavorite = { name, url }
+
+      const userState = current(state[userEmail])
+      let flagDeletedOrAdd = ''
+
+      if (userState?.favorites?.length === 0) {
+        flagDeletedOrAdd = 'add'
+      } else {
+        userState.favorites?.forEach((el) => {
+          if (el.name === name) {
+            flagDeletedOrAdd = 'delete'
+          } else {
+            flagDeletedOrAdd = 'add'
+          }
+        })
       }
 
-      const favoriteIndex = user.favorites.findIndex(
-        (favorite) => favorite.name === name
-      )
-
-      if (favoriteIndex === -1) {
-        user.favorites.push({ name, url })
-      } else {
-        user.favorites.splice(favoriteIndex, 1)
+      if (flagDeletedOrAdd === 'add') {
+        let newFavorites = userState.favorites
+        const newFavoritesCopy = [...(newFavorites as []), newFavorite]
+        state[userEmail].favorites = newFavoritesCopy
+      } else if (flagDeletedOrAdd === 'delete') {
+        const newFavorites = userState.favorites?.filter(
+          (el) => el.name !== name
+        )
+        state[userEmail].favorites = newFavorites
       }
     },
-    deleteFavorite(
-      state,
-      action: PayloadAction<{ name: string; userEmail: string }>
-    ) {
-      const { name, userEmail } = action.payload
-      const user = state[userEmail]
-      if (!user) {
-        return
-      }
 
-      user.favorites = user.favorites.filter(
-        (favorite) => favorite.name !== name
-      )
+    deleteFavorite(state, action) {
+      const { name, userEmail } = action.payload
+      const userState = current(state[userEmail])
+      const newFavorites = userState.favorites?.filter((el) => el.name !== name)
+      state[userEmail].favorites = newFavorites
     },
   },
+
   extraReducers: (builder) => {
     builder.addCase(postHistory.fulfilled, (state, action) => {
-      const { currentUser, historySearchCopy } = action.payload || {}
-      if (currentUser && state[currentUser.email]) {
-        state[currentUser.email].historySearch = historySearchCopy || []
+      const userEmail = action.payload?.currentUser.email
+      if (userEmail) {
+        state[userEmail].historySearch = action.payload?.historySearchCopy
       }
     })
+
     builder.addCase(getHistory.fulfilled, (state, action) => {
-      const { currentUser, links } = action.payload || {}
-      if (currentUser && state[currentUser.email]) {
-        state[currentUser.email].historySearch = links || []
+      const userEmail = action.payload.currentUser.email
+      if (userEmail) {
+        state.user[userEmail].historySearch = action.payload.links
       }
     })
+
     builder.addCase(deleteHistory.fulfilled, (state, action) => {
-      const { currentUser } = action.payload || {}
-      if (currentUser && state[currentUser.email]) {
-        state[currentUser.email].historySearch = []
+      const userEmail = action.payload.currentUser.email
+      if (userEmail) {
+        state[userEmail].historySearch = []
       }
     })
   },

@@ -1,5 +1,41 @@
 # Cinematix
+
 React app with info about movies
+Выполненные требования к проекту
+
+- Функциональные компоненты c хуками в приоритете над классовыми
+- Есть четкое разделение на умные и глупые компоненты
+- Есть рендеринг списков
+  - https://github.com/Svork7/cinematix/blob/main/src/components/SearchResults/SearchResults.tsx
+  - https://github.com/Svork7/cinematix/blob/main/src/components/Pages/Favorite/Favorite.tsx - https://github.com/Svork7/cinematix/blob/main/src/components/Pages/History/History.tsx
+- Реализованы формы
+  - https://github.com/Svork7/cinematix/blob/main/src/components/UI/SearchInput/SearchInput.tsx
+  - https://github.com/Svork7/cinematix/blob/main/src/components/UI/Input/Input.tsx
+- Есть применение Контекст API https://github.com/Svork7/cinematix/tree/main/src/components/ThemeProvider.tsx
+- Есть применение предохранителя:
+  https://github.com/Svork7/cinematix/blob/main/src/App.tsx
+  https://github.com/Svork7/cinematix/blob/main/src/components/ErrorFallback/ErrorFallback.tsx
+- Есть хотя бы один кастомный хук: https://github.com/Svork7/cinematix/blob/main/src/app/hooks.ts
+- Использование PropTypes https://github.com/Svork7/cinematix/blob/main/src/components/Card/Card.tsx (проект писался на тайпскрипте, поэтому указал в одном компоненте чтобы было)
+- Поиск не должен триггерить много запросов к серверу
+  https://github.com/Svork7/cinematix/blob/main/src/app/useDebounce.ts
+  https://github.com/Svork7/cinematix/blob/main/src/components/Pages/Movies/Movies.tsx
+- Есть применение lazy + Suspense
+  https://github.com/Svork7/cinematix/blob/main/src/components/Pages/Movies/Movies.tsx
+  https://github.com/Svork7/cinematix/blob/main/src/components/Pages/Search/Search.tsx
+
+### Redux
+
+- Использование Modern Redux with Redux Toolkit
+- Используем слайсы https://github.com/Svork7/cinematix/blob/main/src/redux/userSlice.ts
+- Есть хотя бы одна кастомная мидлвара https://github.com/Svork7/cinematix/blob/main/src/middleware/checkLoginMiddleware.ts
+- Используется RTK Query https://github.com/Svork7/cinematix/blob/main/src/API/omdbAPI.ts
+- Используется Transforming Responses https://github.com/Svork7/cinematix/blob/main/src/API/omdbAPI.ts
+
+## 2 уровень
+
+- Использование TypeScript
+- StoryBook https://github.com/Svork7/cinematix/blob/main/src/components/UI/Button/Button.stories.tsx
 
 # Getting Started with Create React App
 

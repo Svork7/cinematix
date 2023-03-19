@@ -39,10 +39,12 @@
 }
 
 .signUpFormRedirectP {
-  color: #000000;
+  color: blue;
   font-size: 18px;
 }
 
 .signUpFormRedirectSpan {
+  color: violet;
   text-decoration: underline;
+  padding-left: 10px;
 }

@@ -7,20 +7,18 @@ import { Loader } from '../../Loader/Loader'
 import styles from './Home.module.css'
 
 const Home = () => {
-  const { username } = useCurrentUser() || {}
-
+  const { username } = useCurrentUser()
   return (
     <div className={styles.home}>
       <Suspense fallback={<Loader />}>
         <div className={styles.homeHeader}>
-          <h1>Movies, Cartoons, Series, TV shows and more.</h1>
+          <h1>
+            {username || 'Dear Guest'}! Movies, cartoons, series and more here.
+          </h1>
+          <Link to="/movies">
+            <Button buttonName="Let`s go!" />
+          </Link>
         </div>
-        <h2 className={styles.homeText}>
-          Welcome, {username || 'Dear Guest'}!
-        </h2>
-        <Link to="/movies">
-          <Button buttonName="Start exploring world of cinema!" />
-        </Link>
       </Suspense>
     </div>
   )

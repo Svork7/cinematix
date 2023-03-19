@@ -5,7 +5,7 @@
 .cardContainer {
   width: 200px;
   overflow: hidden;
-  border-radius: 15px 15px 0 0;
+  border-radius: 15px;
   padding: 0px 0px 150% 0px;
   position: relative;
 }
@@ -17,15 +17,17 @@
   top: 0;
   left: 0;
   object-fit: cover;
-  transition: 0.4s ease;
+  transition: 1s ease;
   color: #ccc;
 }
 
-.cardImg:hover {
+.cardContainer:hover {
   transform: scale(1.1);
+  transition: 0.5s ease;
 }
-
+/*
 .cardBtn {
   margin: 0;
+  width: 200px;
   border-radius: 0px 0px 15px 15px;
-}
+}*/

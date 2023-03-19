@@ -1,24 +1,24 @@
 import { Middleware } from 'redux'
 import { RootState } from '../app/store'
-import { User } from '../redux/userSlice'
 
-type Action = { type: string; payload: { email: string } }
+export const checkLoginMiddleware: Middleware =
+  (store) => (next) => (action) => {
+    let result
+    const currentStore: RootState = store.getState()
 
-const checkLoginMiddleware: Middleware<{}, RootState> =
-  (store) => (next) => (action: Action) => {
-    const state: RootState = store.getState()
-    const existingUser: User | undefined = Object.values(state.user).find(
-      (user) => user.email === action.payload.email
-    )
-
-    if (action.type === 'user/addUser' && existingUser) {
-      alert(
-        'Email address already registered! Please, try again using different email.'
+    if (action.type === 'user/addUser') {
+      const emailUsed = Object.values(currentStore.user).find(
+        (user) => user.email === action.payload.email
       )
-      return
+
+      if (emailUsed) {
+        alert('Email address already registered!')
+
+        return result
+      }
     }
 
-    return next(action)
-  }
+    result = next(action)
 
-export default checkLoginMiddleware
+    return result
+  }

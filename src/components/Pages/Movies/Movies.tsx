@@ -1,14 +1,12 @@
-import React, { useState, Suspense } from 'react'
+import React, { useState, Suspense, useCallback } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
-import { useAppDispatch, useCurrentUser } from '../../../app/hooks'
+import ForwardIcon from '@mui/icons-material/Forward'
 import useDebounce from '../../../app/useDebounce'
 import { useFetchAllMoviesQuery } from '../../../API/omdbAPI'
-import { postHistory } from '../../../redux/userSlice'
-import SearchInput from '../../UI/SearchInput/SearchInput'
+import { SearchInput } from '../../UI/SearchInput/SearchInput'
 import { Loader } from '../../Loader/Loader'
 import { Card } from '../../Card/Card'
 import PageHeader from '../../Pages/PageHeader'
-import ForwardIcon from '@mui/icons-material/Forward'
 import styles from './Movies.module.css'
 
 const SearchResults = React.lazy(
@@ -16,24 +14,23 @@ const SearchResults = React.lazy(
 )
 
 export const Movies = () => {
-  const dispatch = useAppDispatch()
-  const userEmail = useCurrentUser()?.email as string
   const location = useLocation()
   const movieName = new URLSearchParams(location.search).get('search')
   const navigate = useNavigate()
 
   const { data = [], isLoading } = useFetchAllMoviesQuery()
   const [searchName, setSearchName] = useState(movieName || '')
-  const debouncedSearchName = useDebounce(searchName, 1000)
+  const debouncedSearchName = useDebounce(searchName, 1500)
 
-  const onChange = (e: { target: HTMLInputElement }) => {
-    setSearchName(e.target.value)
-  }
+  const onChange = useCallback(
+    (e: { target: HTMLInputElement }) => {
+      setSearchName(e.target.value)
+    },
+    [setSearchName]
+  )
 
   React.useEffect(() => {
     if (searchName.length > 0) {
-      const url = `${location.pathname}?search=${debouncedSearchName}`
-      dispatch(postHistory({ url, userEmail }))
       navigate(`?search=${debouncedSearchName}`)
     }
   }, [debouncedSearchName])

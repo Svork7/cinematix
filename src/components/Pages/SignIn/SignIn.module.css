@@ -1,5 +1,4 @@
 .signIn {
-  width: 100vw;
   height: 80vh;
   display: flex;
   flex-direction: column;
@@ -11,7 +10,7 @@
 
 .signInForm {
   max-width: 450px;
-  height: 350px;
+  height: 400px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -40,8 +39,8 @@
 }
 
 .signInRedirectSpan {
-  color: #000000;
-  font-size: 16px;
+  color: blue;
+  font-size: 20px;
   letter-spacing: 0.03em;
   text-decoration: underline;
 }

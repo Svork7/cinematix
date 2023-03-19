@@ -1,12 +1,15 @@
 import { useState } from 'react'
+import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit'
+import { RootState } from '../../app/store'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useAppDispatch, useCurrentUser } from '../hooks'
 import { TYPE_FILTER } from '../constants'
 import { postHistory } from '../../redux/userSlice'
-
+/*
 export const useSearchHandler = () => {
   const location = useLocation()
-  const dispatch = useAppDispatch()
+  const dispatch: ThunkDispatch<RootState, unknown, AnyAction> =
+    useAppDispatch()
   const userEmail = useCurrentUser()?.email as string
 
   const [query, setQuery] = useState<string>(() => {
@@ -37,8 +40,9 @@ export const useSearchHandler = () => {
     filterState: any
   ) => {
     const resultQueryParams = generateQueryParams(searchName, filterState)
-    const url = `${location.pathname}?${resultQueryParams}`
-    dispatch(postHistory({ url, userEmail }))
+    const url: string = `${location.pathname}?${resultQueryParams}`
+    const payload = { url, userEmail }
+    dispatch(postHistory(payload))
     navigate(url)
     setQuery(resultQueryParams)
   }
@@ -51,3 +55,4 @@ export const useSearchHandler = () => {
     applyFilters,
   }
 }
+*/

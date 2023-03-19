@@ -4,8 +4,16 @@
 
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { API_KEY, OMDB_API_URL } from '../app/constants'
+import { Search } from '../app/types'
 
-// Тип для объекта фильма
+// Тип для объекта ответа от API
+
+export interface MovieResponse {
+  Search: Record<string, Search>[]
+  totalResults: string
+  Response: string
+  [propName: string]: any
+} // Типы для объекта фильма
 export interface MovieInfo {
   Title: string
   Year: string
@@ -13,80 +21,71 @@ export interface MovieInfo {
   Type: string
   Poster: string
   Released: string
-  Production: string
   Director: string
   Actors: string
   Plot: string
   Country: string
   imdbRating: string
   BoxOffice: string
-  Website: string
 }
 
-// Тип для объекта ответа от API
-export interface OmdbAPIResponse {
-  Search: MovieInfo[]
-  totalResults: string
-  Response: string
-  [propName: string]: any
-}
-
-// Создаем экземпляр API с помощью createApi
 export const omdbAPI = createApi({
   reducerPath: 'movies',
   baseQuery: fetchBaseQuery({ baseUrl: OMDB_API_URL }),
-
-  // endpoint-ы для запросов к API
   endpoints: (build) => ({
-    // Получаем список всех фильмов
-    fetchAllMovies: build.query<MovieInfo[], void>({
+    fetchAllMovies: build.query<Record<string, any>[], void>({
       query: () => ({
-        url: `?apikey=${API_KEY}&s=sunshine`,
+        url: `?apikey=${API_KEY}&s=sunshine&type=movie`,
       }),
-      transformResponse: (data: OmdbAPIResponse): MovieInfo[] => {
-        return data.Search.map((movie: any) =>
-          Object.keys(movie).reduce((acc, key) => {
-            acc[key.toLowerCase() as keyof MovieInfo] = movie[key]
-            return acc
-          }, {} as MovieInfo)
-        )
+      transformResponse: (data: MovieResponse) => {
+        return data.Search.map((item) => {
+          const transformedKeys = Object.fromEntries(
+            Object.entries(item).map(([key, value]) => [
+              key.toLowerCase(),
+              value,
+            ])
+          )
+          return transformedKeys
+        })
       },
     }),
 
-    // Получаем информацию о конкретном фильме по его названию
-    fetchMovie: build.query<MovieInfo, string>({
+    fetchMovie: build.query<any, string>({
       query: (query) => ({
         url: `?apikey=${API_KEY}&t=${query}&plot=full`,
       }),
-      transformResponse: (data: OmdbAPIResponse): MovieInfo =>
-        Object.keys(data).reduce((acc, key) => {
-          acc[key.toLowerCase() as keyof MovieInfo] = data[key]
-          return acc
-        }, {} as MovieInfo),
-    }),
+      transformResponse: (data: Array<MovieInfo>) => {
+        const transformedData: Record<string, MovieInfo> = {}
 
-    // поиск фильмов по запросу
-    fetchMovies: build.query<MovieInfo[], string>({
+        Object.entries(data).forEach(([key, value]) => {
+          transformedData[key.toLowerCase()] = value
+        })
+
+        return transformedData
+      },
+    }),
+    fetchMovies: build.query({
       query: (query) => ({
         url: `?apikey=${API_KEY}&s=${query}`,
       }),
-      transformResponse: (data: OmdbAPIResponse): MovieInfo[] => {
-        if (data.Response === 'False' && data.Error === 'Movie not found!') {
+      transformResponse: (data: MovieResponse) => {
+        if (data.Error === 'Movie not found!') {
           return []
         } else {
-          // ответ API в список фильмов
-          return data.Search.map((movie: any) =>
-            Object.keys(movie).reduce((acc, key) => {
-              acc[key.toLowerCase() as keyof MovieInfo] = movie[key]
-              return acc
-            }, {} as MovieInfo)
-          )
+          return data.Search.map((item) => {
+            const transformedKeys = Object.fromEntries(
+              Object.entries(item).map(([key, value]) => [
+                key.toLowerCase(),
+                value,
+              ])
+            )
+            return transformedKeys
+          })
         }
       },
     }),
   }),
 })
-
 // Экспортируем утилиты для использования в приложении
 export const {
   useFetchAllMoviesQuery,
