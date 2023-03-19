@@ -35,6 +35,7 @@ React app with info about movies
 ## 2 уровень
 
 - Использование TypeScript
+- StoryBook https://github.com/Svork7/cinematix/blob/main/src/components/UI/Button/Button.stories.tsx
 
 # Getting Started with Create React App
 
