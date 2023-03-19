@@ -2,14 +2,9 @@ import { User } from '../redux/userSlice'
 
 const delay = 1000
 
-interface HistoryApiResponse {
-  currentUser: User
-  historySearchCopy?: string[]
-}
-
-const historyAPI = {
+export const historyAPI = {
   post: (currentUser: User, url: string) =>
-    new Promise<HistoryApiResponse>((resolve, reject) => {
+    new Promise<User>((resolve, reject) => {
       setTimeout(() => {
         if (!currentUser.email) {
           reject('User does not exist')
@@ -18,7 +13,8 @@ const historyAPI = {
         let historySearchCopy
 
         if (currentUser.historySearch) {
-          historySearchCopy = [...currentUser.historySearch, url]
+          historySearchCopy = [...currentUser.historySearch]
+          historySearchCopy?.push(url)
         }
 
         resolve({ currentUser, historySearchCopy })
@@ -28,16 +24,15 @@ const historyAPI = {
   get: (currentUser: User) =>
     new Promise<{ currentUser: User; links: string[] }>((resolve, reject) => {
       setTimeout(() => {
-        resolve({ currentUser, links: currentUser.historySearch ?? [] })
+        currentUser.historySearch &&
+          resolve({ currentUser, links: currentUser.historySearch })
       }, delay)
     }),
 
   delete: (currentUser: User) =>
     new Promise<{ currentUser: User }>((resolve, reject) => {
       setTimeout(() => {
-        resolve({ currentUser })
+        currentUser.historySearch && resolve({ currentUser })
       }, delay)
     }),
 }
-
-export default historyAPI

@@ -1,0 +1,36 @@
+.errorBoundary {
+  height: fit-content;
+  min-height: 80vh;
+  display: flex;
+  background-image: url('../../img/main-background.png');
+  background-size: 100vw;
+  padding: 1rem 10rem;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
+}
+
+.errorBoundaryP {
+  color: #fff;
+  margin: 3rem 0;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 40px;
+  text-align: center;
+}
+
+.errorBoundaryButton {
+  padding: 10px;
+  width: 200px;
+  background-color: #831010;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.errorBoundaryButton:hover {
+  background-color: #db0000;
+}

@@ -2,8 +2,6 @@ import {
   combineReducers,
   configureStore,
   getDefaultMiddleware,
-  Middleware,
-  ThunkMiddleware,
 } from '@reduxjs/toolkit'
 import {
   persistReducer,
@@ -13,10 +11,11 @@ import {
   PAUSE,
   PERSIST,
   PURGE,
+  REGISTER,
 } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import userSliceReducer from '../redux/userSlice'
-import checkLoginMiddleware from '../middleware/checkLoginMiddleware'
+import { checkLoginMiddleware } from '../middleware/checkLoginMiddleware'
 import { omdbAPI } from '../API/omdbAPI'
 
 const rootReducer = combineReducers({
@@ -32,22 +31,16 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
-const middleware: Array<Middleware | ThunkMiddleware> = [
-  ...getDefaultMiddleware({
-    serializableCheck: {
-      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE],
-    },
-  }),
-  checkLoginMiddleware,
-  omdbAPI.middleware,
-]
-
 const store = configureStore({
   reducer: persistedReducer,
-  middleware,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }).concat([checkLoginMiddleware, omdbAPI.middleware]),
 })
 export default store
-
 export const persistor = persistStore(store)
 
 export type RootState = ReturnType<typeof store.getState>

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import styles from './Input.module.css'
+import s from './Input.module.css'
 
 interface Props {
   id: number
@@ -14,26 +14,26 @@ interface Props {
   onChange: React.ChangeEventHandler<HTMLInputElement>
 }
 
-const Input = (props: Props) => {
+const Input = ({ label, errorMessage, onChange, id, ...inputProps }: Props) => {
   const [focus, setFocus] = useState(false)
-  const { label, errorMessage, onChange, id, ...inputProps } = props
 
   const handleFocus = () => {
     setFocus(true)
   }
 
   return (
-    <div className={styles.input}>
-      <label className={styles.inputLabel}>{label}</label>
+    <div className={s.input}>
+      <label className={s.inputLabel}>{label}</label>
+
       <input
-        className={styles.inputInput}
+        className={s.inputInput}
         {...inputProps}
         onChange={onChange}
         onBlur={handleFocus}
         onFocus={() => inputProps.name === 'confirmPassword' && handleFocus()}
         data-focused={focus.toString()}
       />
-      <span className={styles.inputSpan}>{errorMessage}</span>
+      <span className={s.inputSpan}>{errorMessage}</span>
     </div>
   )
 }

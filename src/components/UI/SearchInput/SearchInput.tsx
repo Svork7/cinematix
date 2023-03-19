@@ -1,4 +1,4 @@
-import styles from './SearchInput.module.css'
+import s from './SearchInput.module.css'
 
 interface Props {
   value: string
@@ -7,13 +7,11 @@ interface Props {
   onChange: React.ChangeEventHandler<HTMLInputElement>
 }
 
-const SearchInput = (props: Props) => {
-  const { onChange, ...inputProps } = props
-
+export const SearchInput = ({ onChange, ...inputProps }: Props) => {
   return (
     <div>
       <input
-        className={styles.searchInput}
+        className={s.searchInput}
         {...inputProps}
         onChange={onChange}
         autoFocus
@@ -21,5 +19,3 @@ const SearchInput = (props: Props) => {
     </div>
   )
 }
-
-export default SearchInput

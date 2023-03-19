@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAppDispatch } from '../../../app/hooks'
 import { addUser } from '../../../redux/userSlice'
 import { SIGNUP_INPUTS } from '../../../app/constants'
@@ -7,7 +7,7 @@ import Input from '../../UI/Input/Input'
 import Button from '../../UI/Button/Button'
 import styles from './SignUp.module.css'
 
-const SignUp = () => {
+export const SignUp = () => {
   const [values, setValues] = useState({
     username: '',
     email: '',
@@ -44,7 +44,6 @@ const SignUp = () => {
     dispatch(addUser(newUser))
     navigate('/signin')
   }
-
   const onChange = (value: string, name: string) => {
     setValues({ ...values, [name]: value })
   }
@@ -54,7 +53,7 @@ const SignUp = () => {
       <div className={styles.signUpForm}>
         <form className={styles.signUpFormForm} onSubmit={createUser}>
           <h1 className={styles.signUpFormHeader}>
-            Ready to continue ? <br /> Sign Up for free!
+            Ready to continue? <br /> Sign Up for free!
           </h1>
           <div>
             {inputs.map((input) => (
@@ -74,21 +73,18 @@ const SignUp = () => {
             ))}
           </div>
           <Button buttonName="SUBMIT" />
+          <div className={styles.signUpFormRedirect}>
+            <p className={styles.signUpFormRedirectP}>
+              Already registered?
+              <Link to="/signin">
+                <span className={styles.signUpFormRedirectSpan}>
+                  Log In Now!
+                </span>
+              </Link>
+            </p>
+          </div>
         </form>
-        <div className={styles.signUpFormRedirect}>
-          <p className={styles.signUpFormRedirectP}>
-            Already registered?
-            <Link to="/signin">
-              <span className={styles.signUpFormRedirectSpan}>
-                {' '}
-                Log In Now!
-              </span>
-            </Link>
-          </p>
-        </div>
       </div>
     </div>
   )
 }
-
-export default SignUp

@@ -21,3 +21,28 @@ nav a {
   color: black;
   margin: 15px;
 }
+
+.modeIcon {
+  cursor: pointer;
+}
+
+.modeWrap {
+  width: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: whitesmoke;
+  font-size: large;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.modeWrapDark {
+  color: black;
+  transition: 1s;
+}
+
+.modeWrapLight {
+  color: #333333;
+  transition: 1s;
+}

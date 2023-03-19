@@ -1,7 +1,8 @@
 .results {
   padding: 30px 30px;
   border-radius: 10px;
-  background-color: blue;
+  background-color: #333333;
+  opacity: 90%;
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;

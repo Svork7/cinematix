@@ -1,13 +1,14 @@
-import { NavLink, Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import logo from './logo.png'
-
-import './Logo.css'
+import styles from './Logo.module.css'
 
 const Logo = () => {
   return (
-    <NavLink to="/">
-      <img className="logo" src={logo} alt="logo" />
-    </NavLink>
+    <div>
+      <NavLink to="/">
+        <img className={styles.logo} src={logo} alt="logo" />
+      </NavLink>
+    </div>
   )
 }
 export default Logo

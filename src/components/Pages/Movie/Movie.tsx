@@ -1,12 +1,13 @@
 import { useParams, useLocation } from 'react-router-dom'
 import { useAppDispatch, useCurrentUser } from '../../../app/hooks'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
+import FavoriteIcon from '@mui/icons-material/Favorite'
 import { useFetchMovieQuery } from '../../../API/omdbAPI'
 import { addFavorite } from '../../../redux/userSlice'
 import { Loader } from '../../Loader/Loader'
 import PageHeader from '../PageHeader'
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
-import FavoriteIcon from '@mui/icons-material/Favorite'
-import styles from './Movie.module.css'
+
+import s from './Movie.module.css'
 
 export const Movie = () => {
   const location = useLocation()
@@ -28,61 +29,61 @@ export const Movie = () => {
 
   if (isLoading) {
     return (
-      <div className={styles.movie}>
+      <div className={s.movie}>
         <Loader />
       </div>
     )
   }
 
   return (
-    <div className={styles.movie}>
+    <div className={s.movie}>
       <PageHeader text="Movie info:" />
-      <div className={styles.movieContainer}>
-        <div className={styles.movieMain}>
-          <div className={styles.moviePoster}>
+      <div className={s.movieContainer}>
+        <div className={s.movieMain}>
+          <div className={s.moviePoster}>
             <img src={data?.poster} alt={data?.title} />
           </div>
-          <div className={styles.movieMainInfos}>
-            <div className=".movieFavorite">
+          <div className={s.movieMainInfos}>
+            <div className={s.movieFavorite}>
               {user?.email ? (
                 isInFavorite ? (
-                  <div className={styles.favoriteBtn} onClick={toggleFavorites}>
-                    <p className={styles.btnText}>Delete from Favorites</p>
+                  <div className={s.favoriteBtn} onClick={toggleFavorites}>
+                    <p className={s.btnText}>Delete from Favorites</p>
                     <FavoriteIcon />
                   </div>
                 ) : (
-                  <div className={styles.favoriteBtn} onClick={toggleFavorites}>
-                    <p className={styles.btnText}>Add to Favorites</p>
+                  <div className={s.favoriteBtn} onClick={toggleFavorites}>
+                    <p className={s.btnText}>Add to Favorites</p>
                     <FavoriteBorderIcon />
                   </div>
                 )
               ) : null}
             </div>
-            <div className={styles.moviesInfo}>
+            <div className={s.movieInfo}>
               <span>Title:</span> {data.title}
             </div>
-            <div className={styles.moviesInfo}>
+            <div className={s.movieInfo}>
               <span>Cast:</span> {data.actors}
             </div>
-            <div className={styles.moviesInfo}>
+            <div className={s.movieInfo}>
               <span>Country:</span> {data.country}
             </div>
-            <div className={styles.moviesInfo}>
+            <div className={s.movieInfo}>
               <span>Director:</span> {data.director}
             </div>
-            <div className={styles.moviesInfo}>
+            <div className={s.movieInfo}>
               <span>Year:</span> {data.year}
             </div>
-            <div className={styles.moviesInfo}>
+            <div className={s.movieInfo}>
               <span>Released:</span> {data.released}
             </div>
-            <div className={styles.moviesInfo}>
+            <div className={s.movieInfo}>
               <span>BoxOffice:</span> {data.boxoffice}
             </div>
-            <div className={styles.moviesInfo}>
+            <div className={s.movieInfo}>
               <span>imdb Rating:</span> {data.imdbrating}
             </div>
-            <div className={styles.moviesInfo}>
+            <div className={s.movieInfo}>
               <span>About:</span> {data.plot}
             </div>
           </div>
